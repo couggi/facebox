@@ -116,6 +116,7 @@
         return true
       })
       $(document).trigger('loading.facebox')
+      $.facebox.settings.opened = true
     },
 
     reveal: function(data, klass) {
@@ -130,7 +131,15 @@
 
     close: function() {
       $(document).trigger('close.facebox')
+      $.facebox.settings.opened = false
       return false
+    },
+    opened: function() { 
+      return $.facebox.settings.opened
+    },
+      
+    afterClose: function(func) { 
+      $(document).bind('afterClose.facebox',func) 
     }
   })
 
