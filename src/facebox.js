@@ -102,14 +102,13 @@
       if ($('#facebox .loading').length == 1) return true
       showOverlay()
 
-      $('#facebox .content').empty()
-      $('#facebox .body').children().hide().end().
+      $('#facebox .content').empty().
         append('<div class="loading"><img src="'+$.facebox.settings.loadingImage+'"/></div>')
 
-      $('#facebox').css({
+      $('#facebox').show().css({
         top:	getPageScroll()[1] + (getPageHeight() / 10),
-        left:	$(window).width() / 2 - 205
-      }).show()
+        left:	$(window).width() / 2 - ($('#facebox .popup').outerWidth() / 2)
+      })
 
       $(document).bind('keydown.facebox', function(e) {
         if (e.keyCode == 27) $.facebox.close()
@@ -122,9 +121,8 @@
     reveal: function(data, klass) {
       $(document).trigger('beforeReveal.facebox')
       if (klass) $('#facebox .content').addClass(klass)
-      $('#facebox .content').append(data)
-      $('#facebox .loading').remove()
-      $('#facebox .body').children().fadeIn('normal')
+      $('#facebox .content').empty().append(data)
+      $('#facebox .popup').children().fadeIn('normal')
       $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').outerWidth() / 2))
       $(document).trigger('reveal.facebox').trigger('afterReveal.facebox')
     },
@@ -180,7 +178,7 @@
     makeCompatible()
 
     var imageTypes = $.facebox.settings.imageTypes.join('|')
-    $.facebox.settings.imageTypesRegexp = new RegExp('\.(' + imageTypes + ')$', 'i')
+    $.facebox.settings.imageTypesRegexp = new RegExp('\\.(' + imageTypes + ')(\\?.*)?$', 'i')
 
     if (settings) $.extend($.facebox.settings, settings)
     $('body').append($.facebox.settings.faceboxHtml)
